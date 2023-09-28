@@ -1,0 +1,8 @@
+rootProject.name = 'microservice-mini-project'
+include 'api-gateway'
+include 'eureka-server'
+include 'keycloak-admin-client'
+include 'task-service'
+include 'config-server'
+include 'common'
+
