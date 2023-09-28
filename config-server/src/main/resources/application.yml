@@ -10,7 +10,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/Sophat128/config-repo
+          uri: https://github.com/Sophat128/microservice-mini-project-config
           #          To give specific branch
           default-label: main
 
