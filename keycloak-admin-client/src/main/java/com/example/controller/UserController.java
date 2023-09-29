@@ -3,6 +3,7 @@ package com.example.controller;
 
 
 import com.example.entity.User;
+import com.example.request.UserRequest;
 import com.example.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +34,9 @@ public class UserController {
 
 
 	@PostMapping("/users")
-	public ResponseEntity<String> addNewUser(@RequestBody User user) {
+	public ResponseEntity<?> addNewUser(@RequestBody UserRequest userRequest) {
 		try {
-			userService.addUser(user);
+			userService.addUser(userRequest);
 			return ResponseEntity.ok("User added successfully");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add user");
@@ -81,7 +82,11 @@ public class UserController {
 
 	@GetMapping("/users/getByEmail")
 	public ResponseEntity<List<User>> getUserByEmail(@RequestParam String email) {
-		return ResponseEntity.ok().body(userService.getUserByEmail(email));
-
+		try {
+			List<User> users = userService.getUserByEmail(email);
+			return ResponseEntity.ok(users);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 }

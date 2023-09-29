@@ -3,12 +3,16 @@ package com.example.service;
 
 import com.example.entity.User;
 import com.example.mapper.UserMapper;
+import com.example.request.UserRequest;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +24,14 @@ public class UserService {
 	private String realm;
 	public UserService(Keycloak keycloak) {
 		this.keycloak = keycloak;
+	}
+
+	private static CredentialRepresentation createPasswordCredentials(String password) {
+		CredentialRepresentation passwordCredentials = new CredentialRepresentation();
+		passwordCredentials.setTemporary(false);
+		passwordCredentials.setType(CredentialRepresentation.PASSWORD);
+		passwordCredentials.setValue(password);
+		return passwordCredentials;
 	}
 
 	public List<User> getAllUsers() {
@@ -49,7 +61,7 @@ public class UserService {
 			if (userRepresentations != null && !userRepresentations.isEmpty()) {
 				return userRepresentations.stream().map(UserMapper::toDto).toList(); // Assuming email is unique
 			} else {
-				return null; // User not found
+				throw new NotFoundException("there is no data for this Email" +email); // User not found
 			}
 		} catch (Exception e) {
 			// Handle exceptions as needed
@@ -58,9 +70,18 @@ public class UserService {
 	}
 
 
-	public void addUser(User user) {
-		UserRepresentation userRepresentation = UserMapper.toRepresentation(user);
-		keycloak.realm(realm).users().create(userRepresentation);
+	public void addUser(UserRequest request) {
+
+		UsersResource usersResource = keycloak.realm(realm).users();
+		CredentialRepresentation credentialRepresentation = createPasswordCredentials(request.getPassword());
+		UserRepresentation userPre = new UserRepresentation();
+		userPre.setUsername(request.getUsername());
+		userPre.setCredentials(Collections.singletonList(credentialRepresentation));
+		userPre.setFirstName(request.getFirstName());
+		userPre.setLastName(request.getLastName());
+		userPre.setEmail(request.getEmail());
+		usersResource.create(userPre);
+
 	}
 
 	public void deleteUserById(String userId) {
