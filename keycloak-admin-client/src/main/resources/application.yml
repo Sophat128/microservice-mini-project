@@ -1,0 +1,21 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8090/auth/realms/moniroit-keycloak
+          jwk-set-uri: http://localhost:8090/auth/realms/moniroit-keycloak/protocol/openid-connect/certs
+
+keycloak:
+  realm: moniroit-keycloak
+  resource: spring-cloud
+  #  auth-server-url: https://demo.docengine.tech/auth/ #docker container
+  auth-server-url: http://localhost:8090/auth/ #docker container
+  credentials:
+    username: 'admin'
+    password: 'admin'
+    client-id: 'spring-cloud' # admin account for creating users
+    secret: 'vEcq7FMXkmSKGJXOtEhCK5kxY4eg7Ats'
+    provider: secret
+server:
+  port: 8084
