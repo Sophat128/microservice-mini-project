@@ -71,9 +71,9 @@ public class UserController {
 
 
 	@PutMapping("/users/{userId}")
-	public ResponseEntity<String> updateUser(@PathVariable String userId, @RequestBody User user) {
+	public ResponseEntity<String> updateUser(@PathVariable String userId, @RequestBody UserRequest userRequest) {
 		try {
-			userService.updateUserById(userId, user);
+			userService.updateUserById(userId, userRequest);
 			return ResponseEntity.ok("User updated successfully");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update user");
@@ -82,11 +82,7 @@ public class UserController {
 
 	@GetMapping("/users/getByEmail")
 	public ResponseEntity<List<User>> getUserByEmail(@RequestParam String email) {
-		try {
-			List<User> users = userService.getUserByEmail(email);
-			return ResponseEntity.ok(users);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
+		return ResponseEntity.ok().body(userService.getUserByEmail(email));
+
 	}
 }

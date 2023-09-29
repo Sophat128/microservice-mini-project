@@ -5,12 +5,12 @@ import com.example.entity.User;
 import com.example.mapper.UserMapper;
 import com.example.request.UserRequest;
 import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.webjars.NotFoundException;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +25,6 @@ public class UserService {
 	public UserService(Keycloak keycloak) {
 		this.keycloak = keycloak;
 	}
-
 	private static CredentialRepresentation createPasswordCredentials(String password) {
 		CredentialRepresentation passwordCredentials = new CredentialRepresentation();
 		passwordCredentials.setTemporary(false);
@@ -61,7 +60,7 @@ public class UserService {
 			if (userRepresentations != null && !userRepresentations.isEmpty()) {
 				return userRepresentations.stream().map(UserMapper::toDto).toList(); // Assuming email is unique
 			} else {
-				throw new NotFoundException("there is no data for this Email" +email); // User not found
+				return null; // User not found
 			}
 		} catch (Exception e) {
 			// Handle exceptions as needed
@@ -71,7 +70,6 @@ public class UserService {
 
 
 	public void addUser(UserRequest request) {
-
 		UsersResource usersResource = keycloak.realm(realm).users();
 		CredentialRepresentation credentialRepresentation = createPasswordCredentials(request.getPassword());
 		UserRepresentation userPre = new UserRepresentation();
@@ -84,14 +82,25 @@ public class UserService {
 
 	}
 
-	public void deleteUserById(String userId) {
+
+		public void deleteUserById(String userId) {
 		keycloak.realm(realm).users().delete(userId);
 	}
 
-	public void updateUserById(String userId, User user) {
-		UserRepresentation userRepresentation = UserMapper.toRepresentation(user);
-		keycloak.realm(realm).users().get(userId).update(userRepresentation);
+	public void updateUserById(String userId, UserRequest request) {
+		UsersResource usersResource = keycloak.realm(realm).users();
+		UserResource userResource = usersResource.get(userId);
+
+		UserRepresentation userRepresentation = userResource.toRepresentation();
+		userRepresentation.setUsername(request.getUsername());
+		userRepresentation.setFirstName(request.getFirstName());
+		userRepresentation.setLastName(request.getLastName());
+		userRepresentation.setEmail(request.getEmail());
+
+		// Update the user representation
+		userResource.update(userRepresentation);
 	}
+
 
 
 }
