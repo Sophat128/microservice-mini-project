@@ -41,6 +41,10 @@ public class GroupController {
 	@PostMapping("/groups")
 	public ResponseEntity<String> addNewGroup(@RequestBody Group group) {
 		try {
+			if (group.getName().isBlank() || group.getName().isEmpty()) {
+				return ResponseEntity.badRequest().body("Name cannot be blank");
+			}
+
 			groupService.addNewGroup(group);
 			return ResponseEntity.ok("Group added successfully");
 		} catch (Exception e) {

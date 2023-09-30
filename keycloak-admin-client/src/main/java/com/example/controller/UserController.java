@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -28,17 +29,41 @@ public class UserController {
 
 
 	@GetMapping("/users/search")
-	public List<User> getAllUser(@RequestParam String username) {
-		return userService.findByUsername(username);
+	public ResponseEntity<List<User>> getAllUser(@RequestParam String username) {
+		List<User> users = userService.findByUsername(username);
+
+		if (users.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(users);
+		}
+
+		return ResponseEntity.ok(users);
 	}
 
 
 	@PostMapping("/users")
-	public ResponseEntity<?> addNewUser(@RequestBody UserRequest userRequest) {
+	public ResponseEntity<String> addUser(@RequestBody UserRequest request) {
 		try {
-			userService.addUser(userRequest);
-			return ResponseEntity.ok("User added successfully");
+			if (request.getUsername() == null || request.getUsername().isBlank()) {
+				return ResponseEntity.badRequest().body("Username cannot be blank");
+			}
+
+			if (request.getPassword() == null || request.getPassword().isEmpty()) {
+				return ResponseEntity.badRequest().body("Password cannot be empty");
+			}
+			if (request.getEmail() == null || !request.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+				return ResponseEntity.badRequest().body("Invalid email format");
+			}
+			if (request.getFirstName() == null || request.getFirstName().isEmpty()) {
+				return ResponseEntity.badRequest().body("FirstName cannot be empty");
+			}
+			if (request.getLastName() == null || request.getLastName().isEmpty()) {
+				return ResponseEntity.badRequest().body("LastName cannot be empty");
+			}
+			userService.addUser(request);
+
+			return ResponseEntity.status(HttpStatus.CREATED).body("User added successfully");
 		} catch (Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add user");
 		}
 	}
@@ -49,7 +74,7 @@ public class UserController {
 			userService.deleteUserById(userId);
 			return ResponseEntity.ok("User deleted successfully");
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete user");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete user with incorrect id");
 		}
 	}
 
@@ -73,16 +98,38 @@ public class UserController {
 	@PutMapping("/users/{userId}")
 	public ResponseEntity<String> updateUser(@PathVariable String userId, @RequestBody UserRequest userRequest) {
 		try {
+			if (userRequest.getUsername() == null || userRequest.getUsername().isBlank()) {
+				return ResponseEntity.badRequest().body("Username cannot be blank");
+			}
+			if (userRequest.getPassword() == null || userRequest.getPassword().isEmpty()) {
+				return ResponseEntity.badRequest().body("Password cannot be empty");
+			}
+			if (userRequest.getEmail() == null || !userRequest.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+				return ResponseEntity.badRequest().body("Invalid email format");
+			}
+			if (userRequest.getFirstName() == null || userRequest.getFirstName().isEmpty()) {
+				return ResponseEntity.badRequest().body("FirstName cannot be empty");
+			}
+			if (userRequest.getLastName() == null || userRequest.getLastName().isEmpty()) {
+				return ResponseEntity.badRequest().body("LastName cannot be empty");
+			}
 			userService.updateUserById(userId, userRequest);
 			return ResponseEntity.ok("User updated successfully");
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update user");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update user with incorrect id");
 		}
 	}
 
 	@GetMapping("/users/getByEmail")
 	public ResponseEntity<List<User>> getUserByEmail(@RequestParam String email) {
-		return ResponseEntity.ok().body(userService.getUserByEmail(email));
 
+		List<User> users = userService.getUserByEmail(email);
+
+		if (users.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(users);
+		}
+
+		return ResponseEntity.ok(users);
 	}
+
 }
