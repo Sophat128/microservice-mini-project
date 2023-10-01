@@ -36,7 +36,7 @@ public class TaskController {
     @GetMapping
     public ResponseEntity<?> getAllTasks() {
         ApiResponse<?> response = ApiResponse.builder()
-                .message("insert user successfully")
+                .message("Get tasks successfully")
                 .status("200")
                 .payload(taskService.getAllTasks())
                 .build();
@@ -47,7 +47,7 @@ public class TaskController {
     public ResponseEntity<?> getTaskById(@PathVariable UUID id) {
         try {
             ApiResponse<?> response = ApiResponse.builder()
-                    .message("insert user successfully")
+                    .message("Get task successfully")
                     .status("200")
                     .payload(taskService.getTaskById(id))
                     .build();
@@ -66,7 +66,7 @@ public class TaskController {
     @PostMapping
     public ResponseEntity<?> addTask(@RequestBody TaskRequest taskRequest) {
         ApiResponse<?> response = ApiResponse.builder()
-                .message("insert user successfully")
+                .message("add task successfully")
                 .status("200")
                 .payload(taskService.addTask(taskRequest))
                 .build();
@@ -78,7 +78,7 @@ public class TaskController {
         try {
             taskService.deleteTask(id);
             ApiResponse<?> response = ApiResponse.builder()
-                    .message("insert user successfully")
+                    .message("delete task successfully")
                     .status("200")
                     .payload("Delete task successfully")
                     .build();
@@ -98,7 +98,7 @@ public class TaskController {
     public ResponseEntity<?> updateTask(@PathVariable UUID id, @RequestBody TaskRequest taskRequest) {
         try {
             ApiResponse<?> response = ApiResponse.builder()
-                    .message("insert user successfully")
+                    .message("update task successfully")
                     .status("200")
                     .payload(taskService.updateTask(id, taskRequest))
                     .build();

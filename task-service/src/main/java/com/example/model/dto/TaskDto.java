@@ -25,14 +25,15 @@ public class TaskDto {
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
 
-    public TaskDto(String title, String description, User createdBy, User assignTo, Group group) {
+    public TaskDto(UUID id, String title, String description, User createdBy, User assignTo, Group group) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.createdBy = createdBy;
         this.assignTo = assignTo;
         this.group =group;
-        LocalDateTime.now();
-        LocalDateTime.now();
+        createdDate = LocalDateTime.now();
+        updatedDate = LocalDateTime.now();
     }
 
 

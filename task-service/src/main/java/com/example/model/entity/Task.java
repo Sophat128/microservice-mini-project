@@ -31,6 +31,7 @@ public class Task {
 
     public TaskDto toDto(User createdBy, User assignTo, Group group) {
         return new TaskDto(
+                this.id,
                 this.title,
                 this.description,
                 createdBy,

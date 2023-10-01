@@ -99,12 +99,6 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.save(task).toDto(createdBy, assignTo, group);
 
     }
-//    @Override
-//    public TaskDto createTask(TaskRequest taskRequest, Jwt jwt) {
-//        return taskRepository.save(taskRequest.toEntity()).toDto(getUserById(taskRequest.getCreatedBy()
-//                , jwt.getTokenValue()).block(), getUserById(taskRequest.getAssignTo(),
-//                jwt.getTokenValue()).block(), getGroupById(taskRequest.getGroupId(), jwt.getTokenValue()).block());
-//    }
 
     @Override
     public List<TaskDto> getAllTasks() {
@@ -112,7 +106,7 @@ public class TaskServiceImpl implements TaskService {
             User createdBy = getUserById(task.getCreateBy()).block();
             User assignTo = getUserById(task.getAssignTo()).block();
             Group group = getGroupById(task.getGroupId()).block();
-            return new TaskDto(task.getTitle(), task.getDescription(), createdBy, assignTo, group);
+            return new TaskDto(task.getId(),task.getTitle(), task.getDescription(), createdBy, assignTo, group);
         }).toList();
 
     }
