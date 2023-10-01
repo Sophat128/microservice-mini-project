@@ -15,6 +15,8 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,7 +50,12 @@ public class GroupService {
 	}
 
 	public void deleteGroupById(String groupId) {
-		keycloak.realm(realm).groups().group(groupId).remove();
+
+		try {
+			keycloak.realm(realm).groups().group(groupId).remove();
+		} catch (NotFoundException e) {
+			throw new RuntimeException("Group not found with ID: " + groupId, e);
+		}
 	}
 
 	public void addUserToGroup(String userId, String groupId) {
