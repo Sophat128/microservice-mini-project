@@ -132,3 +132,25 @@ services:
     command: /create.sh
 
 # --------------------------- Zipkin End ------------------------
+
+  # --------------------------- task db ------------------------
+
+
+  db:
+    image: postgres:11.4
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: my_password
+      POSTGRES_USER: my_user
+      POSTGRES_DB: task_db
+
+
+    ports:
+      - '33008:5432'
+
+
+    volumes:
+      - my-db:/var/lib/pos
+
+  # --------------------------- task db End ------------------------
+
