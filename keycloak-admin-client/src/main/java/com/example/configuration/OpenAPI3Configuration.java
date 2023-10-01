@@ -10,8 +10,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
 
 @OpenAPIDefinition(
-//        servers = { @Server(url = "https://localhost:9001")},
-
+        servers = { @Server(url = "https://localhost:9001")},
         info = @Info(title = "Department Service APIs", description = "This lists all the Department Service API Calls. The Calls are OAuth2 secured, "
         + "so please use your client ID and Secret to test them out.",
         version = "v1.0"))

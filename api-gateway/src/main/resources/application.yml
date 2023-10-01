@@ -3,10 +3,13 @@
 #greeting: "hello local"
 
 
+
 spring:
   main:
     allow-bean-definition-overriding: true
-  #    To specify the profile
+  application:
+    name: eureka-server
+    #    To specify the profile
   profiles:
     active: gateway
   config:
@@ -25,5 +28,18 @@ management:
     web:
       exposure:
         include: refresh
+
+#spring:
+#  application:
+#    name: microservice_mini_project
+#
+#eureka:
+#  client:
+#    register-with-eureka: false
+#    fetch-registry: false
+#  instance:
+#    hostname: localhost
+#server:
+#  port: 8761
 
 

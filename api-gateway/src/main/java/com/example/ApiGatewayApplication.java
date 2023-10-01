@@ -7,8 +7,9 @@ import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.cors.reactive.CorsWebFilter;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,16 +23,39 @@ public class ApiGatewayApplication {
     }
 
     @Bean
-    public CorsWebFilter corsWebFilter() {
-        final CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOrigins(Collections.singletonList("http://localhost:8080"));
-        corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "HEAD", "PUT"));
-        corsConfig.addAllowedHeader("Access-Control-Allow-Origin");
-
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfig);
-
-        return new CorsWebFilter(source);
+    public CorsFilter corsFilter() {
+        final org.springframework.web.cors.UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        final CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.setAllowedOriginPatterns(Collections.singletonList("*")); // Allows all origin
+        config.setAllowedHeaders(
+                Arrays.asList(
+                        "X-Requested-With",
+                        "Origin",
+                        "Content-Type",
+                        "Accept",
+                        "Authorization",
+                        "Access-Control-Allow-Credentials",
+                        "Access-Control-Allow-Headers",
+                        "Access-Control-Allow-Methods",
+                        "Access-Control-Allow-Origin",
+                        "Access-Control-Expose-Headers",
+                        "Access-Control-Max-Age",
+                        "Access-Control-Request-Headers",
+                        "Access-Control-Request-Method",
+                        "Age",
+                        "Allow",
+                        "Alternates",
+                        "Content-Range",
+                        "Content-Disposition",
+                        "Content-Description"
+                )
+        );
+        config.setAllowedMethods(
+                Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH")
+        );
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
 
 }

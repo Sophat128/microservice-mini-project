@@ -15,14 +15,21 @@
 //
 //@Configuration
 //public class SpringCloudConfig {
-//
 //    @Bean
-//    public RouteLocator buildRouteLocator(RouteLocatorBuilder builder) {
-//        return builder.routes()
-//                .route(r -> r.path("/task-service/v3/api-docs").and().method(HttpMethod.GET).uri("lb://task-service"))
-//                .route(r -> r.path("/keycloak-client/v3/api-docs").and().method(HttpMethod.GET).uri("lb://keycloak-client"))
-//                .build();
+//    public RouteLocator buildRouteLocator(RouteLocatorBuilder builder){
+//        return builder.routes().route(r-> r.path("/api/v1/users/**")
+//                        .filters(f-> f.setResponseHeader("CustomRespHeader", "SomeValue"))
+//                        .uri("http://localhost:8181"))
+//                .route(r-> r.path("/api/v1/tasks/**").uri("http://localhost:8282")).build();
 //    }
+//
+////    @Bean
+////    public RouteLocator buildRouteLocator(RouteLocatorBuilder builder) {
+////        return builder.routes()
+////                .route(r -> r.path("/task-service/v3/api-docs").and().method(HttpMethod.GET).uri("lb://task-service"))
+////                .route(r -> r.path("/keycloak-client/v3/api-docs").and().method(HttpMethod.GET).uri("lb://keycloak-client"))
+////                .build();
+////    }
 //
 //
 //}
