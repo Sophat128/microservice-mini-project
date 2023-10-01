@@ -1,4 +1,4 @@
-package com.example.model.entity;
+package com.example.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,10 +6,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class Group {
-    private String id;
-    private String name;
+	private UUID groupId;
+	private String name;
+
+
 }

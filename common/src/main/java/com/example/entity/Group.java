@@ -1,13 +1,17 @@
-package com.example.model.request;
-
+package com.example.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
+import java.util.UUID;
+
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRequest {
-    private String name;
+@Data
+public class Group {
+	private UUID groupId;
+	private String name;
+
+
 }

@@ -4,9 +4,9 @@
 
 
 spring:
-  application:
-    name: gateway-service
-    #    To specify the profile
+  main:
+    allow-bean-definition-overriding: true
+  #    To specify the profile
   profiles:
     active: gateway
   config:

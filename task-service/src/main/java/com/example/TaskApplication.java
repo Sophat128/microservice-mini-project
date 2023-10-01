@@ -11,9 +11,9 @@ import java.util.Arrays;
 import java.util.Collections;
 
 @SpringBootApplication
-public class KeycloakAdminClientApplication {
+public class TaskApplication {
     public static void main(String[] args) {
-        SpringApplication.run(KeycloakAdminClientApplication.class,args);
+        SpringApplication.run(TaskApplication.class, args);
         System.out.println("Hello world!");
     }
 

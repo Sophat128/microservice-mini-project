@@ -1,23 +1,27 @@
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+
+
+#greeting: "hello local"
+
+
+spring:
+    #    To specify the profile
+  profiles:
+    active: task
+  config:
+    import: "optional:configserver:"
+  cloud:
+    config:
+      uri: http://localhost:8888
+
+
+#greeting: "Hello Local!"
+
+
+# we need to enable the refresh endpoint
 management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: refresh
 
 
-
-
-openapi:
-  service:
-    title: task-service doc #title that you will want to display in the swagger ui
-    version: 1.0.0
-    url: http://localhost:9001 #api gateway url
-springdoc:
-  api-docs:
-    path: /task-service/v3/api-docs #these urls will used to load the swagger ui of this service by the api gateway
-  swagger-ui:
-    path: /task-service/swagger-ui.html
