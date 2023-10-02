@@ -24,14 +24,8 @@ import java.util.concurrent.Flow;
 @RequestMapping("/api/v1/tasks")
 @AllArgsConstructor
 public class TaskController {
-
-
     private final TaskService taskService;
 
-//    @PostMapping("tasks")
-//    public ResponseEntity<?> createTask(@RequestBody TaskRequest taskRequest, @AuthenticationPrincipal Jwt jwt) {
-//        return ResponseEntity.ok().body(taskService.createTask(taskRequest, jwt));
-//    }
 
     @GetMapping
     public ResponseEntity<?> getAllTasks() {

@@ -1,11 +1,12 @@
 package com.example;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.gateway.route.RouteLocator;
+import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.cors.reactive.CorsWebFilter;
@@ -20,6 +21,18 @@ public class ApiGatewayApplication {
     public static void main(String[] args) {
         SpringApplication.run(ApiGatewayApplication.class, args);
         System.out.println("Hello world!");
+    }
+
+    @Bean
+    public RouteLocator routeLocator(RouteLocatorBuilder builder) {
+        return builder
+                .routes()
+                .route(r -> r.path("/task-service/v3/api-docs").and().method(HttpMethod.GET).uri("lb://task-service"))
+                .route(r -> r.path("/keycloak-client/v3/api-docs").and().method(HttpMethod.GET).uri("lb://keycloak-client"))
+                .route(r -> r.path("/api/v1/tasks/**").and().method(HttpMethod.GET).uri("lb://task-service"))
+                .route(r -> r.path("/api/v1/users/**").and().method(HttpMethod.GET).uri("lb://keycloak-client"))
+                .route(r -> r.path("/api/v1/groups/**").and().method(HttpMethod.GET).uri("lb://keycloak-client"))
+                .build();
     }
 
     @Bean

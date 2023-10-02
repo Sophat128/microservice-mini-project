@@ -26,7 +26,7 @@ public class SecurityConfig {
 	) throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable);
 		http.authorizeHttpRequests(authorize ->
-				authorize.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+				authorize.requestMatchers("task-service/v3/api-docs/**", "task-service/swagger-ui/**", "task-service/swagger-ui.html").permitAll()
 						.anyRequest().authenticated()
 		);
 		http.oauth2ResourceServer(t -> {

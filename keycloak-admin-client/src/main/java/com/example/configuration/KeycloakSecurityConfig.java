@@ -30,7 +30,7 @@ public class KeycloakSecurityConfig {
 	) throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable);
 		http.authorizeHttpRequests(authorize ->
-				authorize.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+				authorize.requestMatchers("keycloak-client/v3/api-docs/**", "keycloak-client/swagger-ui/**", "keycloak-client/swagger-ui.html").permitAll()
 						.requestMatchers("api/v1/users/users/**").permitAll()
 						.requestMatchers("api/v1/groups/groups/**").permitAll()
 						.anyRequest().authenticated()
