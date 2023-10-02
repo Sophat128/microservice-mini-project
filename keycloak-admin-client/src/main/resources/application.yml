@@ -5,7 +5,6 @@ spring:
         jwt:
           issuer-uri: http://localhost:8090/auth/realms/moniroit-keycloak
           jwk-set-uri: http://localhost:8090/auth/realms/moniroit-keycloak/protocol/openid-connect/certs
-
 keycloak:
   realm: moniroit-keycloak
   resource: spring-cloud
@@ -17,5 +16,54 @@ keycloak:
     client-id: 'spring-cloud' # admin account for creating users
     secret: 'vEcq7FMXkmSKGJXOtEhCK5kxY4eg7Ats'
     provider: secret
+
+resilience4j:
+
+  circuitbreaker:
+
+    instances:
+
+      service_A:
+
+        registerHealthIndicator: true
+
+        eventConsumerBufferSize: 10
+
+        failureRateThreshold: 50
+
+        minimumNumberOfCalls: 5
+
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+
+        waitDurationInOpenState: 5s
+
+        permittedNumberOfCallsInHalfOpenState: 3
+
+        slidingWindowSize: 10
+
+        slidingWindowType: COUNT_BASED
+management:
+
+  health:
+
+    circuitbreakers:
+
+      enabled: true
+
+  endpoints:
+
+    web:
+
+      exposure:
+
+        include: health
+
+  endpoint:
+
+    health:
+
+      show-details: always
 server:
   port: 8084
+
+

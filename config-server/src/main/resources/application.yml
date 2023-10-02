@@ -5,7 +5,7 @@ server:
 
 spring:
   application:
-    name: config-server
+    name: microservice-mini-project-config
   cloud:
     config:
       server:

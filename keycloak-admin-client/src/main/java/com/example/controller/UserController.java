@@ -5,6 +5,7 @@ package com.example.controller;
 import com.example.entity.User;
 import com.example.request.UserRequest;
 import com.example.service.UserService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/users")
+@CircuitBreaker(name = "UserController", fallbackMethod = "userControllerFallback")
 public class UserController {
 
 	private final UserService userService;
@@ -132,4 +134,7 @@ public class UserController {
 		return ResponseEntity.ok(users);
 	}
 
+	public String userControllerFallback(Exception e){
+		return  "This is the fallback of UserController";
+	}
 }
