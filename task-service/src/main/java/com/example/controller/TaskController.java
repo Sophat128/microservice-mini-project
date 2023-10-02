@@ -1,9 +1,11 @@
 package com.example.controller;
 
 import com.example.exception.NotFoundExceptionClass;
+import com.example.model.dto.TaskDto;
 import com.example.model.request.TaskRequest;
 import com.example.model.respone.ApiResponse;
 import com.example.service.TaskService;
+import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -14,8 +16,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Flow;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @RestController
@@ -28,6 +33,7 @@ public class TaskController {
 
 
     @GetMapping
+    @Retry(name = "task-service",fallbackMethod = "getAllAvailableTasks")
     public ResponseEntity<?> getAllTasks() {
         ApiResponse<?> response = ApiResponse.builder()
                 .message("Get tasks successfully")
@@ -35,6 +41,13 @@ public class TaskController {
                 .payload(taskService.getAllTasks())
                 .build();
         return ResponseEntity.ok(response);
+    }
+    public List<TaskDto> getAllAvailableTasks(Exception e){
+        return Stream.of(
+                new TaskDto(null, null, null,null,null,null),
+                new TaskDto(null, null, null,null,null,null),
+                new TaskDto(null, null, null,null,null,null)
+        ).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
@@ -87,7 +100,6 @@ public class TaskController {
         }
 
     }
-
     @PutMapping("/{id}")
     public ResponseEntity<?> updateTask(@PathVariable UUID id, @RequestBody TaskRequest taskRequest) {
         try {

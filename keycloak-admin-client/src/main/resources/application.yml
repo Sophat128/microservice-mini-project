@@ -22,6 +22,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh
+        include:
+          - '*'
 
+  endpoint:
+    prometheus:
+      enabled: true
 
